@@ -16,6 +16,7 @@ int main(int argc, const char* argv[]) {
                 ("host", po::value<std::string>()->required(), "where to download from")
                 ("path", po::value<std::string>()->default_value("/index.html"), "the path on host")
                 ("outfile", po::value<std::string>()->default_value("download"), "the path to write the downloaded file to")
+                ("serial", po::bool_switch()->default_value(false), "use serial download instead of the default parallel")
                 ;
         po::variables_map vars;
         try
@@ -34,9 +35,22 @@ int main(int argc, const char* argv[]) {
         
         std::ofstream fs(outfile, std::ios::out | std::ios::binary | std::ios::trunc);
         std::ostream_iterator<uint8_t> os(fs);
-        network::download_file_parallel(vars["host"].as<std::string>(), 80,
-                                        vars["path"].as<std::string>(),
-                                        vars["chunk-number"].as<int>(),
-                                        vars["chunk-size"].as<size_t>(),
-                                        os);
+        if (vars["serial"].as<bool>())
+        {
+                network::download_file_parallel(
+                        vars["host"].as<std::string>(), 80,
+                        vars["path"].as<std::string>(),
+                        vars["chunk-number"].as<int>(),
+                        vars["chunk-size"].as<size_t>(),
+                        os);
+        }
+        else
+        {
+                network::download_file_sequential(
+                        vars["host"].as<std::string>(), 80,
+                        vars["path"].as<std::string>(),
+                        vars["chunk-number"].as<int>(),
+                        vars["chunk-size"].as<size_t>(),
+                        os);
+        }
 }
