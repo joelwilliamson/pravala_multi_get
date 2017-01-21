@@ -8,7 +8,10 @@ namespace network
 
         // Download a file using the provided chunk size and count. If the size
         // of the file is less than number_requests * request_size it will not
-        // be fully downloaded.
+        // be fully downloaded. The parallel download will use multiple threads
+        // to make requests and buffer all the results in memory until the
+        // entire file is downloaded. The sequential download will run
+        // everything on the main thread
         // Return the amount of data downloaded.
         size_t download_file_parallel(
                 const std::string& host, uint16_t port, const std::string& path,

@@ -37,7 +37,7 @@ int main(int argc, const char* argv[]) {
         std::ostream_iterator<uint8_t> os(fs);
         if (vars["serial"].as<bool>())
         {
-                network::download_file_parallel(
+                network::download_file_sequential(
                         vars["host"].as<std::string>(), 80,
                         vars["path"].as<std::string>(),
                         vars["chunk-number"].as<int>(),
@@ -46,7 +46,7 @@ int main(int argc, const char* argv[]) {
         }
         else
         {
-                network::download_file_sequential(
+                network::download_file_parallel(
                         vars["host"].as<std::string>(), 80,
                         vars["path"].as<std::string>(),
                         vars["chunk-number"].as<int>(),
