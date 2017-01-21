@@ -13,3 +13,8 @@ Building
 --------
 
 `make` will build the project and run unit tests on the HTTP message library.
+
+Limitations
+-----------
+
+multi-get only supports downloading over port 80. A URL that specifies a different port number will not be parsed correctly.
