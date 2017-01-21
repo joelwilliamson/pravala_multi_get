@@ -30,6 +30,8 @@ int main(int argc, const char* argv[]) {
                 return 1;
         }
         
+        size_t chunk_size = vars["chunk-size"].as<size_t>();
+        int chunk_number = vars["chunk-number"].as<int>();
         std::string outfile(vars["outfile"].as<std::string>());
         std::string host, path;
         std::tie(host, path) = network::parse_url(vars["url"].as<std::string>());
@@ -40,16 +42,12 @@ int main(int argc, const char* argv[]) {
         {
                 network::download_file_sequential(
                         host, 80, path,
-                        vars["chunk-number"].as<int>(),
-                        vars["chunk-size"].as<size_t>(),
-                        os);
+                        chunk_number, chunk_size, os);
         }
         else
         {
                 network::download_file_parallel(
                         host, 80, path,
-                        vars["chunk-number"].as<int>(),
-                        vars["chunk-size"].as<size_t>(),
-                        os);
+                        chunk_number, chunk_size, os);
         }
 }
