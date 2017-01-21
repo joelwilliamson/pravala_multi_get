@@ -85,6 +85,7 @@ namespace network
                                         return std::copy(buf.cbegin(), buf.cend(),
                                                          os); });
                         total_downloaded += downloaded;
+                        start_byte += request_size;
                 }
                 if (f.valid())
                         f.wait();
