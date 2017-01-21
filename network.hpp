@@ -6,6 +6,8 @@
 namespace network
 {
 
+        std::pair<std::string, std::string> parse_url(const std::string& url);
+
         // Download a file using the provided chunk size and count. If the size
         // of the file is less than number_requests * request_size it will not
         // be fully downloaded. The parallel download will use multiple threads

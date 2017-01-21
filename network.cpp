@@ -3,9 +3,32 @@
 #include "message.hpp"
 
 #include <future>
+#include <regex>
 
 namespace network
 {
+
+        std::pair<std::string, std::string> parse_url(const std::string& url)
+        {
+                std::string regex_string = R"(^(http://)?([^/:]+)([^:]*)$)";
+                // This assumes the host is either a registered name or an IPv4
+                // address. IPv6 WILL NOT WORK!
+                std::regex r(regex_string, std::regex::extended);
+                auto url_part = std::sregex_iterator(url.cbegin(), url.cend(), r);
+                if (std::distance(url_part, std::sregex_iterator()) != 1)
+                {
+                        throw std::runtime_error("Invalid URL");
+                }
+                std::string scheme = (*url_part)[1].str();
+                std::string host = (*url_part)[2].str();
+                std::string path = (*url_part)[3].str();
+                if (path.size() == 0)
+                {
+                        path = "/";
+                }
+                return std::make_pair(std::move(host), std::move(path));
+        }
+
         size_t download_file_parallel(
                 const std::string& host, uint16_t port, const std::string& path,
                 int number_requests, size_t request_size,
